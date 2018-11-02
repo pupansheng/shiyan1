@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lost.found.mapper.ItemMapper" >
+  <resultMap id="BaseResultMap" type="lost.found.pojo.Item" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="losttime" property="losttime" jdbcType="DATE" />
+    <result column="createtime" property="createtime" jdbcType="DATE" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="itemstatus" property="itemstatus" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="lost.found.pojo.Item" extends="BaseResultMap" >
+    <result column="itemdesc" property="itemdesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, title, location, losttime, createtime, num, image, itemstatus, uid
+  </sql>
+  <sql id="Blob_Column_List" >
+    itemdesc
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="lost.found.pojo.ItemExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="lost.found.pojo.ItemExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="getSumCount" resultType="int">
+  
+   SELECT COUNT(*) FROM item
+  
+  </select>
+  <select id="getSumCountByUid" resultType="int" parameterType="int">
+   SELECT COUNT(*) FROM item where uid=#{id}
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from item
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="lost.found.pojo.ItemExample" >
+    delete from item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="lost.found.pojo.Item" >
+    insert into item (id, title, location, 
+      losttime, createtime, num, 
+      image, itemstatus, uid, 
+      itemdesc)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
+      #{losttime,jdbcType=DATE}, #{createtime,jdbcType=DATE}, #{num,jdbcType=INTEGER}, 
+      #{image,jdbcType=VARCHAR}, #{itemstatus,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, 
+      #{itemdesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="lost.found.pojo.Item" useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+  
+    insert into item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="losttime != null" >
+        losttime,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="itemstatus != null" >
+        itemstatus,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="itemdesc != null" >
+        itemdesc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="losttime != null" >
+        #{losttime,jdbcType=DATE},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=DATE},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="itemstatus != null" >
+        #{itemstatus,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="itemdesc != null" >
+        #{itemdesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <select id="selectIndex10" resultType="lost.found.pojo.Item" >
+  SELECT 
+  `id`,
+  `title`,
+  `location`,
+  `losttime`,
+  `createtime`,
+  `num`,
+  `image`,
+  `itemdesc`,
+  `itemstatus`,
+  `uid` 
+FROM
+  `lostandfound`.`item` 
+  ORDER BY losttime DESC
+LIMIT 0, 10 ;
+
+  </select>
+  <select id="getItemPage" resultType="lost.found.pojo.Item" >
+SELECT 
+  `id`,
+  `title`,
+  `location`,
+  `losttime`,
+  `createtime`,
+  `num`,
+  `image`,
+  `itemdesc`,
+  `itemstatus`,
+  `uid` 
+ FROM
+  `lostandfound`.`item` 
+  ORDER BY losttime DESC
+LIMIT #{now},#{pagesize};
+</select>
+<select id="getItemPageFabu" resultType="lost.found.pojo.Item" >
+SELECT 
+  `id`,
+  `title`,
+  `location`,
+  `losttime`,
+  `createtime`,
+  `num`,
+  `image`,
+  `itemdesc`,
+  `itemstatus`,
+  `uid` 
+ FROM
+  `lostandfound`.`item` 
+   where uid=#{uid}
+  ORDER BY losttime DESC
+LIMIT #{now},#{pagesize};
+</select>
+  <select id="countByExample" parameterType="lost.found.pojo.ItemExample" resultType="java.lang.Integer" >
+    select count(*) from item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update item
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.location != null" >
+        location = #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.losttime != null" >
+        losttime = #{record.losttime,jdbcType=DATE},
+      </if>
+      <if test="record.createtime != null" >
+        createtime = #{record.createtime,jdbcType=DATE},
+      </if>
+      <if test="record.num != null" >
+        num = #{record.num,jdbcType=INTEGER},
+      </if>
+      <if test="record.image != null" >
+        image = #{record.image,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemstatus != null" >
+        itemstatus = #{record.itemstatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.uid != null" >
+        uid = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.itemdesc != null" >
+        itemdesc = #{record.itemdesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update item
+    set id = #{record.id,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      location = #{record.location,jdbcType=VARCHAR},
+      losttime = #{record.losttime,jdbcType=DATE},
+      createtime = #{record.createtime,jdbcType=DATE},
+      num = #{record.num,jdbcType=INTEGER},
+      image = #{record.image,jdbcType=VARCHAR},
+      itemstatus = #{record.itemstatus,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER},
+      itemdesc = #{record.itemdesc,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update item
+    set id = #{record.id,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      location = #{record.location,jdbcType=VARCHAR},
+      losttime = #{record.losttime,jdbcType=DATE},
+      createtime = #{record.createtime,jdbcType=DATE},
+      num = #{record.num,jdbcType=INTEGER},
+      image = #{record.image,jdbcType=VARCHAR},
+      itemstatus = #{record.itemstatus,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="lost.found.pojo.Item" >
+    update item
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="losttime != null" >
+        losttime = #{losttime,jdbcType=DATE},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=DATE},
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="itemstatus != null" >
+        itemstatus = #{itemstatus,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="itemdesc != null" >
+        itemdesc = #{itemdesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="lost.found.pojo.Item" >
+    update item
+    set title = #{title,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      losttime = #{losttime,jdbcType=DATE},
+      createtime = #{createtime,jdbcType=DATE},
+      num = #{num,jdbcType=INTEGER},
+      image = #{image,jdbcType=VARCHAR},
+      itemstatus = #{itemstatus,jdbcType=INTEGER},
+      uid = #{uid,jdbcType=INTEGER},
+      itemdesc = #{itemdesc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="lost.found.pojo.Item" >
+    update item
+    set title = #{title,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      losttime = #{losttime,jdbcType=DATE},
+      createtime = #{createtime,jdbcType=DATE},
+      num = #{num,jdbcType=INTEGER},
+      image = #{image,jdbcType=VARCHAR},
+      itemstatus = #{itemstatus,jdbcType=INTEGER},
+      uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
